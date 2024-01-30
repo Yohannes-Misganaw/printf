@@ -8,49 +8,49 @@
  * Return: Number of characters printed
  */
 
-int _printf(const char *format, ...)
+int _printf(const char* format, ...)
 {
-    va_list args;
-    int count = 0;
-    const char *ptr;
-    char c;
+	va_list li_args;
+	va_start(li_args, format);
 
-    va_start(args, format);
+	int count = 0;
 
-    for (ptr = format; *ptr != '\0'; ptr++)
-    {
-        if (*ptr == '%')
-        {
-            switch (*(++ptr))
-            {
-            case 'c':
-                c = va_arg(args, int);
-                putchar(c);
-                count++;
-                break;
-            case 's':
-                count += printf("%s", va_arg(args, char *));
-                break;
-            case '%':
-                putchar('%');
-                count++;
-                break;
-            default:
-                putchar('%');
-                putchar(*ptr);
-                count += 2;
-                break;
-            }
-        }
-        else
-        {
-            putchar(*ptr);
-            count++;
-        }
-    }
+	for (int i = 0; format[i] != '\0'; i++)
+	{
+		if (format[i] == '%')
+		{
+			i++;
 
-    va_end(args);
-
-    return count;
+			switch (format[i])
+			{
+				case 'c':
+				{
+					char c = va_arg(li_args, int);
+					putchar(c);
+					count++;
+					break;
+				}
+				case 's':
+				{
+					char* s = va_arg(li_args, char*);
+					fputs(s, stdout);
+					count += strlen(s);
+					break;
+				}
+				default:
+					putchar('%');
+					putchar(format[i]);
+					count += 2;
+					break;
+			}
+		}
+		else
+		{
+			putchar(format[i]);
+			count++;
+		}
+	}
+	va_end(li_args);
+	
+	return count;
 }
-
