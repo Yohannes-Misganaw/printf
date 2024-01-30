@@ -1,56 +1,53 @@
 #include "main.h"
 
-
 /**
  * _printf - Custom printf function
  * @format: Format string
  *
- * Return: Number of characters printed
+ * Return: Number of characters printed excluding null byte
  */
 
-int _printf(const char* format, ...)
+int _printf(const char *format, ...)
 {
-	va_list li_args;
-	va_start(li_args, format);
+	va_list argli;
+	int ncount = 0;
+	const char *ptr;
+	char c;
+	
+	va_start(argli, format);
 
-	int count = 0;
-
-	for (int i = 0; format[i] != '\0'; i++)
+	for (ptr = format; *ptr != '\0'; ptr++)
 	{
-		if (format[i] == '%')
+		if (*ptr == '%')
 		{
-			i++;
-
-			switch (format[i])
+			switch (*(++ptr))
 			{
-				case 'c':
-				{
-					char c = va_arg(li_args, int);
-					putchar(c);
-					count++;
-					break;
-				}
-				case 's':
-				{
-					char* s = va_arg(li_args, char*);
-					fputs(s, stdout);
-					count += strlen(s);
-					break;
-				}
-				default:
-					putchar('%');
-					putchar(format[i]);
-					count += 2;
-					break;
+			case 'c':
+				c = va_arg(argli, int);
+				putchar(c);
+				ncount++;
+				break;
+			case 's':
+				ncount += printf("%s", va_arg(argli, char *));
+				break;
+			case '%':
+				putchar('%');
+				ncount++;
+				break;
+			default:
+				putchar('%');
+				putchar(*ptr);
+				ncount += 2;
+				break;
 			}
 		}
 		else
 		{
-			putchar(format[i]);
-			count++;
+			putchar(*ptr);
+			ncount++;
 		}
 	}
-	va_end(li_args);
-	
-	return count;
+	va_end(argli);
+	return ncount;
 }
+
