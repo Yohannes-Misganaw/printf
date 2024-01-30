@@ -8,6 +8,7 @@ void print_buf(char buffer[], int *buff_ind);
  *
  * Return: Number of characters printed (excluding null byte)
  */
+
 int _printf(const char *format, ...)
 {
 	int i, printed = 0, printed_chars = 0;
@@ -32,16 +33,16 @@ int _printf(const char *format, ...)
 		else
 		{
 			print_buf(buffer, &buff_ind);
-			// flags = get_flags(format, &i);
-			// width = get_width(format, &i, argli);
-			// precision = get_precision(format, &i, argli);
-			// size = get_size(format, &i);
-			// ++i;
-			// printed = handle_print(format, &i, argli, buffer,
-			// 	flags, width, precision, size);
-			// if (printed == -1)
-			// 	return (-1);
-			// printed_chars += printed;
+			flags = get_flags(format, &i);
+			width = get_width(format, &i, argli);
+			precision = get_precision(format, &i, argli);
+			size = get_size(format, &i);
+			++i;
+			printed = handle_print(format, &i, argli, buffer,
+				flags, width, precision, size);
+			if (printed == -1)
+				return (-1);
+			printed_chars += printed;
 		}
 	}
 
@@ -51,6 +52,7 @@ int _printf(const char *format, ...)
 
 	return (printed_chars);
 }
+
 
 /**
  * print_buf - Prints the contents of the buffer if it exist
